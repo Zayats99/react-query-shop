@@ -1,13 +1,32 @@
 import { useNavigate } from "react-router-dom";
 
 import { Button, CardActionArea, CardActions, Card, CardMedia, Typography, CardContent, Divider } from "@mui/material";
-import { IProduct } from "../../services/product.service";
+import { useProductDelete } from "../../hooks";
 
-export function ProductCard({ id, title, price, category, images }: Partial<IProduct>) {
+interface IProductCard {
+	id: number;
+	title: string;
+	price: number;
+	category: {
+		id: number;
+		name: string;
+		image: string;
+	};
+	images: string[] | string;
+	refetch: () => void;
+}
+
+export function ProductCard({ id, title, price, category, images, refetch }: IProductCard) {
 	const navigate = useNavigate();
+
+	const { deleteProduct } = useProductDelete(String(id));
 
 	function clickHandler() {
 		navigate(`/product/${id}`);
+	}
+	async function deleteHandler() {
+		await deleteProduct.mutateAsync();
+		await refetch();
 	}
 
 	return (
@@ -36,7 +55,7 @@ export function ProductCard({ id, title, price, category, images }: Partial<IPro
 						{title}
 					</Typography>
 					<Typography variant="body2" color="text.secondary">
-						Price: {price}
+						Price: {price}$
 					</Typography>
 					<Typography variant="body2" color="text.secondary">
 						Category: {category?.name}
@@ -44,7 +63,10 @@ export function ProductCard({ id, title, price, category, images }: Partial<IPro
 				</CardContent>
 			</CardActionArea>
 			<Divider />
-			<CardActions>
+			<CardActions sx={{ justifyContent: "space-between" }}>
+				<Button size="small" color="error" onClick={deleteHandler}>
+					Delete
+				</Button>
 				<Button size="small" color="primary" onClick={clickHandler}>
 					BUY
 				</Button>

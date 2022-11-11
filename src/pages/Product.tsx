@@ -1,17 +1,22 @@
 import { SetStateAction, useState } from "react";
 import { useParams } from "react-router-dom";
 
-import { EditProductModal } from "../components";
-import { Backdrop, CircularProgress, Grid, Box, ButtonBase, Typography, Button } from "@mui/material";
 import { useProduct } from "../hooks";
+
+import { ProductModal } from "../components";
+import { Backdrop, CircularProgress, Grid, Box, ButtonBase, Typography, Button } from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
 
 function Product() {
 	const { id } = useParams();
 
-	const { isLoading, product } = useProduct(id);
-	// console.log(product);
+	const { isLoading, product, refetch } = useProduct(id);
 
 	const [currentImg, setCurrentImg] = useState(0);
+	const [openModal, setOpenModal] = useState(false);
+
+	const handleOpenModal = () => setOpenModal(true);
+	const handleClose = () => setOpenModal(false);
 
 	function swithPhotoHandler(i: SetStateAction<number>) {
 		setCurrentImg(i);
@@ -39,18 +44,19 @@ function Product() {
 							src={product?.images[currentImg]}
 						/>
 						<Grid item container justifyContent="center" alignItems="center" sx={{ p: 1, gap: "10px" }}>
-							{product?.images.map((img, index) => (
-								<ButtonBase key={index} onClick={() => swithPhotoHandler(index)}>
-									<Box
-										component="img"
-										sx={{
-											width: 120,
-										}}
-										alt={product?.title}
-										src={img}
-									/>
-								</ButtonBase>
-							))}
+							{Array.isArray(product?.images) &&
+								product?.images.map((img, index) => (
+									<ButtonBase key={index} onClick={() => swithPhotoHandler(index)}>
+										<Box
+											component="img"
+											sx={{
+												width: 120,
+											}}
+											alt={product?.title}
+											src={img}
+										/>
+									</ButtonBase>
+								))}
 						</Grid>
 					</Grid>
 					<Grid
@@ -63,7 +69,19 @@ function Product() {
 						md={5}
 						sx={{ p: 3 }}
 					>
-						{product && <EditProductModal initialState={product} />}
+						{product && (
+							<>
+								<Button onClick={handleOpenModal} sx={{ ml: "auto", height: "40px", p: 0, mb: "auto" }}>
+									<EditIcon fontSize="large" />
+								</Button>
+								<ProductModal
+									open={openModal}
+									initialState={product}
+									handleClose={handleClose}
+									refetch={refetch}
+								/>
+							</>
+						)}
 						<Typography gutterBottom variant="body2">
 							Category: {product?.category.name}
 						</Typography>
