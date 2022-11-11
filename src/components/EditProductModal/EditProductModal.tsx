@@ -13,7 +13,7 @@ import {
   MenuItem,
 } from "@mui/material"
 import EditIcon from "@mui/icons-material/Edit"
-import { CloudinaryUploadWidget } from "../CloudinaryUploadWidget/CloudinaryUploadWidget"
+import UploadWidget from "../CloudinaryUploadWidget/UploadWidget"
 
 interface IEditProductModal {
   initialState: IProduct
@@ -143,7 +143,7 @@ export function EditProductModal({ initialState }: IEditProductModal) {
                     Delete
                   </Button>
 				   {/* Cloudinary widget for uploading picture */}
-				   <CloudinaryUploadWidget />
+           <UploadWidget />
                   <Button
                     variant="contained"
                     type="submit"
