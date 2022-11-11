@@ -16,6 +16,7 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 import { useState } from "react";
 import { Container } from "@mui/system";
+import { ProductModal } from "../ProductModal/ProductModal";
 
 interface Props {
 	/**
@@ -67,6 +68,11 @@ function Header(props: Props) {
 		navigate(item.link);
 	}
 
+	const [openModal, setOpenModal] = useState(false);
+
+	const handleOpenModal = () => setOpenModal(true);
+	const handleClose = () => setOpenModal(false);
+
 	return (
 		<>
 			<AppBar>
@@ -94,6 +100,13 @@ function Header(props: Props) {
 									{item.title}
 								</Button>
 							))}
+							<Button sx={{ color: "#fff" }} onClick={handleOpenModal}>
+								Create
+							</Button>
+							<ProductModal
+									open={openModal}
+									handleClose={handleClose}
+								/>
 						</Box>
 					</Toolbar>
 				</Container>
