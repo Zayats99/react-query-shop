@@ -13,10 +13,10 @@ interface IProductCard {
 		image: string;
 	};
 	images: string[] | string;
-	refetch: () => void;
+	refetchProducts: () => void;
 }
 
-export function ProductCard({ id, title, price, category, images, refetch }: IProductCard) {
+export function ProductCard({ id, title, price, category, images, refetchProducts }: IProductCard) {
 	const navigate = useNavigate();
 
 	const { deleteProduct } = useProductDelete(String(id));
@@ -26,7 +26,7 @@ export function ProductCard({ id, title, price, category, images, refetch }: IPr
 	}
 	async function deleteHandler() {
 		await deleteProduct.mutateAsync();
-		await refetch();
+		await refetchProducts();
 	}
 
 	return (

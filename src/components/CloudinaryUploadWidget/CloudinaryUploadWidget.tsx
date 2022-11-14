@@ -22,11 +22,10 @@ export const CloudinaryUploadWidget: FC<CloudinaryUploadWidgetProps> = ({
 }) => {
  
   const initialsImagesArray = useMemo(()=> convertImagesToFileImageType(images) ,[images]);
-
+console.log(initialsImagesArray)
   const [image, _setImage] = useState<TFileImage[] | []>(initialsImagesArray);
-  const [isActiveRemoveButtons, setIisActiveRemoveButtons] = useState<boolean>(false);
   const inputFileRef = useRef<any>(null);
-
+console.log(images)
   const cleanup = () => {
     image.map((img) => URL.revokeObjectURL(img?.url));
     if (inputFileRef && inputFileRef.current) {
@@ -57,10 +56,7 @@ export const CloudinaryUploadWidget: FC<CloudinaryUploadWidgetProps> = ({
     }
     
   };
-  const handleOpenImageMenu = () => {
-    setIisActiveRemoveButtons(!isActiveRemoveButtons);
-  };
-
+ 
   const handleRemoveImage = (item: string) => {
     _setImage(image.filter((img) => img.url !== item));
     if (onChangeImage) {
@@ -72,8 +68,7 @@ export const CloudinaryUploadWidget: FC<CloudinaryUploadWidgetProps> = ({
       <Grid item container sx={styles.gridContainer}>
         {image.length !== 0 &&
           image.map((item, index) => (
-            <Box key={index} sx={styles.boxStyle} onClick={handleOpenImageMenu}>
-              {isActiveRemoveButtons && (
+            <Box key={index} sx={styles.boxStyle}>
                 <EditBox>
                   <IconButton
                     sx={{ ...styles.iconButton, marginLeft: "-10px" }}
@@ -82,7 +77,6 @@ export const CloudinaryUploadWidget: FC<CloudinaryUploadWidgetProps> = ({
                     <DeleteOutlineIcon />
                   </IconButton>
                 </EditBox>
-              )}
               <CardMedia sx={styles.img} component="img" image={item.url} />
             </Box>
           ))}

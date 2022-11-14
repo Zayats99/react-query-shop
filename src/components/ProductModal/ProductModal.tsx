@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Formik } from "formik";
 import { IProduct } from "../../services/product.service";
-import { useCategories, useProductDelete, useProductUpdate, useProductCreate } from "../../hooks";
+import { useCategories, useProductDelete, useProductUpdate, useProductCreate, useProducts } from "../../hooks";
 
 import { Box, Button, Typography, Modal, TextField, Grid, MenuItem, InputAdornment } from "@mui/material";
 import { useEffect } from "react";
@@ -13,7 +13,7 @@ import { TFileImage } from './../../types/FileImage';
 interface IProductModal {
 	open: boolean;
 	initialState?: IProduct;
-	refetch?: () => void;
+	refetchProduct?: () => void;
 	handleClose: () => void;
 }
 
@@ -36,8 +36,9 @@ const style = {
 	padding: "20px 32px",
 };
 
-export function ProductModal({ open, initialState, refetch, handleClose }: IProductModal) {
+export function ProductModal({ open, initialState, refetchProduct, handleClose }: IProductModal) {
 	const { categories } = useCategories();
+	const { refetchProducts } = useProducts();
 	const { createProduct } = useProductCreate();
 	const { updateProduct } = useProductUpdate(String(initialState?.id));
 	const { deleteProduct } = useProductDelete(String(initialState?.id));
@@ -48,6 +49,34 @@ export function ProductModal({ open, initialState, refetch, handleClose }: IProd
 	const handleDelete = async () => {
 		await deleteProduct.mutateAsync();
 		navigate("/");
+	};
+
+	const handleSubmitForm = async (values: IModalState) => {
+		// const img = typeof values.images === "string" ? values.images.split(",") : values.images;
+		// const modifiedValues = { ...values, images: img };
+		// if (initialState) {
+		// 	await updateProduct.mutateAsync(modifiedValues);
+		// 	refetchProduct && await refetchProduct();
+		// } else {
+		// 	await createProduct.mutateAsync(modifiedValues);
+		// 	await refetchProducts();
+		// }
+		if (initialState) {
+			// Promise.all(checkUploadedImage(modifiedValues.images)).then(images => updateProduct.mutateAsync({...modifiedValues, images}).then(()=> refetch && refetch()))
+			Promise.all(checkUploadedImage(values.images as TFileImage[])).then(async images => {
+				await updateProduct.mutateAsync({ ...values, images });
+				return refetchProduct && await refetchProduct();
+			})
+			// Promise.all(checkUploadedImage(values.images as TFileImage[])).then( images => console.log(images))
+			// Promise.all(checkUploadedImage(values.images as TFileImage[])).then(images => console.log(images))
+		} 
+		// else {
+			// Promise.all(checkUploadedImage(values.images as TFileImage[])).then(images => createProduct.mutateAsync({...values, images}).then(async ()=> await refetchProducts()))
+
+			// await createProduct.mutateAsync(modifiedValues);
+		// }
+
+		handleClose();
 	};
 
 	useEffect(() => {
@@ -70,28 +99,13 @@ console.log('prod')
 			>
 				<Box sx={style}>
 					<Typography id="modal-modal-title" variant="h6" component="h2">
-						{initialState ? 'Edit' : 'Create'} Product
+						{initialState ? "Edit" : "Create"} Product
 					</Typography>
 
 					<Formik
 						initialValues={{ ...initialValues }}
-						onSubmit={async (values) => {
-							// const img = typeof values.images === "string" ? values.images.split(",") : values.images;
-							// const modifiedValues = { ...values, images: img };
-							if (initialState) {
-								// Promise.all(checkUploadedImage(modifiedValues.images)).then(images => updateProduct.mutateAsync({...modifiedValues, images}).then(()=> refetch && refetch()))
-								Promise.all(checkUploadedImage(values.images as TFileImage[])).then(async images => {
-									await updateProduct.mutateAsync({ ...values, images });
-									return refetch && refetch();
-								})
-								// Promise.all(checkUploadedImage(values.images as TFileImage[])).then(images => console.log(images))
-							} else {
-								Promise.all(checkUploadedImage(values.images as TFileImage[])).then(images => createProduct.mutateAsync({...values, images}))
-
-								// await createProduct.mutateAsync(modifiedValues);
-							}
-
-							handleClose();
+						onSubmit={(values) => {
+							handleSubmitForm(values);
 						}}
 					>
 						{({ values, errors, touched, handleChange, handleBlur, handleSubmit, isSubmitting, setFieldValue}) => (
@@ -184,8 +198,7 @@ console.log('prod')
 										disabled={isSubmitting}
 										sx={{ ml: "auto" }}
 									>
-										{initialState ? 'Update' : 'Create'}
-										
+										{initialState ? "Update" : "Create"}
 									</Button>
 								</Grid>
 							</Box>
