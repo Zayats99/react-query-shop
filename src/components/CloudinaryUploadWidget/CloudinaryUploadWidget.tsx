@@ -42,9 +42,11 @@ export const CloudinaryUploadWidget: FC<CloudinaryUploadWidgetProps> = ({
       onChangeImage("images", [...image, newImage])
     }
   }
-  const handleOnChandge = (e: any) => {
+  const handleOnChandge = async (e: any) => {
     const newImage = e.target.files[0]
+    
     if (newImage) {
+      console.log(newImage)
       setImage(URL.createObjectURL(newImage))
     }
   }
@@ -55,7 +57,6 @@ export const CloudinaryUploadWidget: FC<CloudinaryUploadWidgetProps> = ({
   const handleRemoveImage = (item: string) => {
     _setImage(image.filter((img) => img !== item))
   }
-
   return (
     <Grid container>
       <Grid item container sx={styles.gridContainer}>

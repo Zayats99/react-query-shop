@@ -7,6 +7,7 @@ import { Box, Button, Typography, Modal, TextField, Grid, MenuItem, InputAdornme
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { CloudinaryUploadWidget } from "../CloudinaryUploadWidget/CloudinaryUploadWidget";
+import { checkUploadedImage } from "../../utils/uploadimageToCloudinary";
 
 interface IProductModal {
 	open: boolean;
@@ -76,10 +77,11 @@ export function ProductModal({ open, initialState, refetch, handleClose }: IProd
 							const img = typeof values.images === "string" ? values.images.split(",") : values.images;
 							const modifiedValues = { ...values, images: img };
 							if (initialState) {
-								await updateProduct.mutateAsync(modifiedValues);
-								refetch && refetch();
+								Promise.all(checkUploadedImage(modifiedValues.images)).then(images => updateProduct.mutateAsync({...modifiedValues, images}).then(()=> refetch && refetch()))
 							} else {
-								await createProduct.mutateAsync(modifiedValues);
+								Promise.all(checkUploadedImage(modifiedValues.images)).then(images => createProduct.mutateAsync({...modifiedValues, images}))
+
+								// await createProduct.mutateAsync(modifiedValues);
 							}
 
 							handleClose();
