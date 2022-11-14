@@ -1,4 +1,4 @@
 export * from "./Header/Header";
 export * from "./ProductCard/ProductCard";
-export * from "./EditProductModal/EditProductModal";
-export * from "./CloudinaryUploadWidget/UploadWidget";
+export * from "./ProductModal/ProductModal";
+export * from './CloudinaryUploadWidget/CloudinaryUploadWidget';

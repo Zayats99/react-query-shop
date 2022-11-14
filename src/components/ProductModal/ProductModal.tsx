@@ -6,6 +6,7 @@ import { useCategories, useProductDelete, useProductUpdate, useProductCreate } f
 import { Box, Button, Typography, Modal, TextField, Grid, MenuItem, InputAdornment } from "@mui/material";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { CloudinaryUploadWidget } from "../CloudinaryUploadWidget/CloudinaryUploadWidget";
 
 interface IProductModal {
 	open: boolean;
@@ -84,7 +85,7 @@ export function ProductModal({ open, initialState, refetch, handleClose }: IProd
 							handleClose();
 						}}
 					>
-						{({ values, errors, touched, handleChange, handleBlur, handleSubmit, isSubmitting }) => (
+						{({ values, errors, touched, handleChange, handleBlur, handleSubmit, isSubmitting, setFieldValue}) => (
 							<Box
 								component="form"
 								sx={{
@@ -143,7 +144,7 @@ export function ProductModal({ open, initialState, refetch, handleClose }: IProd
 									value={values.description}
 									sx={{ width: "100%" }}
 								/>
-								<TextField
+								{/* <TextField
 									name="images"
 									onChange={handleChange}
 									onBlur={handleBlur}
@@ -152,7 +153,11 @@ export function ProductModal({ open, initialState, refetch, handleClose }: IProd
 									variant="outlined"
 									helperText="Please fill this field with image URLs divided by commas"
 									sx={{ width: "100%" }}
-								/>
+								/> */}
+								   <CloudinaryUploadWidget
+                  						images={values.images}
+                  						onChangeImage={setFieldValue}
+                					/>
 								<Grid container sx={{ mt: "30px", gap: "10px" }}>
 									<Button variant="outlined" color="primary" onClick={handleClose}>
 										Cancel
