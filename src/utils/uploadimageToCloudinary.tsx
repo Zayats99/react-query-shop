@@ -1,4 +1,5 @@
 import axios from "axios";
+import { TFileImage } from './../types/FileImage';
 // const CLOUDINARY_UPLOAD_URL = process.env.REACT_APP_CLOUDINARY_UPLOAD_URL
 const UPLOAD_PRESET = process.env.REACT_APP_UPLOAD_PRESET as string;
 const CLOUD_NAME = process.env.REACT_APP_CLOUDINARY_UPLOAD_NAME as string;
@@ -22,12 +23,13 @@ const getFileFromURLObject = async (
     .then((r) => r.blob())
     .then((res) => new File([res], fileName, { type: typeFile }));
 };
-export const checkUploadedImage = (images: string[]) => {
+export const checkUploadedImage = (images: TFileImage[]) => {
+  if(images.length === 0) return []
   return images.map(async (image) => {
-    if (image.includes("blob")) {
-      return await getFileFromURLObject(image,'1','type/jpg').then(file => uploadImageToCloudinary(file))
+    if (image.type) {
+      return await getFileFromURLObject(image.url, image.name, image.type).then(file => uploadImageToCloudinary(file))
     } else {
-      return image;
+      return image.url;
     }
   });
 };

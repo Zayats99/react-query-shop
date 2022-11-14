@@ -1,5 +1,8 @@
 import { Box } from "@mui/material"
 import { styled } from "@mui/system"
+
+import { TFileImage } from "../../types/FileImage"
+
 export const styles = {
   gridContainer: {
     justifyContent: "center",
@@ -11,11 +14,13 @@ export const styles = {
     height: "100px",
     borderRadius: "15px",
     border: "2px dashed #ccc",
+    // overflow: 'hidden'
   },
   img: {
     width: "100%",
     height: "100%",
     objectFit: "contain",
+    zIndex: '-1'
   },
   emptyBox: {
     display: "flex",
@@ -49,3 +54,13 @@ export const EditBox = styled(Box)({
     display: "flex",
     justifyContent: "space-between",
 })
+
+export const convertImagesToFileImageType = (img: string[] | string | TFileImage[] | undefined) => {
+  if (!img) return [];
+ 
+  return Array.isArray(img)
+    ? img.some((item: any) => typeof item === "string")
+      ? (img.map((item) => ({ url: item })) as TFileImage[])
+      : (img as TFileImage[])
+    : [{ url: img }];
+};

@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { CloudinaryUploadWidget } from "../CloudinaryUploadWidget/CloudinaryUploadWidget";
 import { checkUploadedImage } from "../../utils/uploadimageToCloudinary";
+import { TFileImage } from './../../types/FileImage';
 
 interface IProductModal {
 	open: boolean;
@@ -21,7 +22,7 @@ interface IModalState {
 	price: number;
 	description: string;
 	categoryId: number;
-	images: string | string[];
+	images: string | string[] | TFileImage[];
 }
 
 const style = {
@@ -56,8 +57,9 @@ export function ProductModal({ open, initialState, refetch, handleClose }: IProd
 		} else {
 			setInitialValues({ title: "", price: 0, description: "", images: "", categoryId: 1 });
 		}
-	}, [initialState]);
+console.log('prod')
 
+	}, [initialState]);
 	return (
 		<>
 			<Modal
@@ -74,12 +76,17 @@ export function ProductModal({ open, initialState, refetch, handleClose }: IProd
 					<Formik
 						initialValues={{ ...initialValues }}
 						onSubmit={async (values) => {
-							const img = typeof values.images === "string" ? values.images.split(",") : values.images;
-							const modifiedValues = { ...values, images: img };
+							// const img = typeof values.images === "string" ? values.images.split(",") : values.images;
+							// const modifiedValues = { ...values, images: img };
 							if (initialState) {
-								Promise.all(checkUploadedImage(modifiedValues.images)).then(images => updateProduct.mutateAsync({...modifiedValues, images}).then(()=> refetch && refetch()))
+								// Promise.all(checkUploadedImage(modifiedValues.images)).then(images => updateProduct.mutateAsync({...modifiedValues, images}).then(()=> refetch && refetch()))
+								Promise.all(checkUploadedImage(values.images as TFileImage[])).then(async images => {
+									await updateProduct.mutateAsync({ ...values, images });
+									return refetch && refetch();
+								})
+								// Promise.all(checkUploadedImage(values.images as TFileImage[])).then(images => console.log(images))
 							} else {
-								Promise.all(checkUploadedImage(modifiedValues.images)).then(images => createProduct.mutateAsync({...modifiedValues, images}))
+								Promise.all(checkUploadedImage(values.images as TFileImage[])).then(images => createProduct.mutateAsync({...values, images}))
 
 								// await createProduct.mutateAsync(modifiedValues);
 							}
