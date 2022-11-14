@@ -6,7 +6,7 @@ import { ProductCard } from "../components";
 import { Backdrop, CircularProgress, Grid, Pagination } from "@mui/material";
 
 export function Home() {
-	const { response, refetch, isFetching } = useProducts();
+	const { response, refetchProducts, isFetching } = useProducts();
 
 	const [page, setPage] = useState(1);
 
@@ -40,7 +40,7 @@ export function Home() {
 									price={price}
 									category={category}
 									images={images}
-									refetch={refetch}
+									refetchProducts={refetchProducts}
 								/>
 							</Grid>
 						))}

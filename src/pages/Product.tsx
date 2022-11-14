@@ -10,7 +10,7 @@ import EditIcon from "@mui/icons-material/Edit";
 function Product() {
 	const { id } = useParams();
 
-	const { isLoading, product, refetch } = useProduct(id);
+	const { isLoading, product, refetchProduct } = useProduct(id);
 
 	const [currentImg, setCurrentImg] = useState(0);
 	const [openModal, setOpenModal] = useState(false);
@@ -78,7 +78,7 @@ function Product() {
 									open={openModal}
 									initialState={product}
 									handleClose={handleClose}
-									refetch={refetch}
+									refetchProduct={refetchProduct}
 								/>
 							</>
 						)}
