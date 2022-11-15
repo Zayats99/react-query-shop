@@ -1,9 +1,9 @@
 import axios from "axios";
-import { TFileImage } from "./../types/FileImage";
-// const CLOUDINARY_UPLOAD_URL = process.env.REACT_APP_CLOUDINARY_UPLOAD_URL
+import { TFileImage } from "./../types";
+
 const UPLOAD_PRESET = process.env.REACT_APP_UPLOAD_PRESET as string;
 const CLOUD_NAME = process.env.REACT_APP_CLOUDINARY_UPLOAD_NAME as string;
-const BASE_URL = `https://api.cloudinary.com/v1_1/dc11k1px5/upload`;
+const BASE_URL = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/upload`;
 
 export const uploadImageToCloudinary = async (file: File) => {
   const formData = new FormData();
@@ -20,7 +20,7 @@ const getFileFromURLObject = async (url: string, fileName: string = "unknown", t
 };
 export const checkUploadedImage = (images: TFileImage[]) => {
   if (images.length === 0) return [];
- 
+ //'https://www.generationsforpeace.org/wp-content/uploads/2018/03/empty.jpg'
   return images.map(async (image) => {
     if (image.type) {
       return await getFileFromURLObject(image.url, image.name, image.type).then(file => uploadImageToCloudinary(file))

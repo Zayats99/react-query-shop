@@ -1,11 +1,11 @@
-import { useMemo, useState } from "react";
+import { memo, useMemo, useState } from "react";
+import { Backdrop, CircularProgress, Grid, Pagination } from "@mui/material";
 
 import { useProducts } from "../hooks";
 
 import { ProductCard } from "../components";
-import { Backdrop, CircularProgress, Grid, Pagination } from "@mui/material";
 
-export function Home() {
+function HomeMemoized() {
 	const { response, refetchProducts, isFetching } = useProducts();
 
 	const [page, setPage] = useState(1);
@@ -23,6 +23,9 @@ export function Home() {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [page, response]);
 
+const refetchAllProducts = () => {
+	refetchProducts()
+}
 	return (
 		<>
 			{isFetching ? (
@@ -40,7 +43,7 @@ export function Home() {
 									price={price}
 									category={category}
 									images={images}
-									refetchProducts={refetchProducts}
+									refetchProducts={refetchAllProducts}
 								/>
 							</Grid>
 						))}
@@ -64,3 +67,4 @@ export function Home() {
 		</>
 	);
 }
+export const Home = memo(HomeMemoized)
