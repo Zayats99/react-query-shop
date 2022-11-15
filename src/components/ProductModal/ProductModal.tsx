@@ -69,12 +69,11 @@ export function ProductModal({ open, initialState, refetchProduct, handleClose }
 			})
 			// Promise.all(checkUploadedImage(values.images as TFileImage[])).then( images => console.log(images))
 			// Promise.all(checkUploadedImage(values.images as TFileImage[])).then(images => console.log(images))
-		} 
-		// else {
-			// Promise.all(checkUploadedImage(values.images as TFileImage[])).then(images => createProduct.mutateAsync({...values, images}).then(async ()=> await refetchProducts()))
+		} else {
+			Promise.all(checkUploadedImage(values.images as TFileImage[])).then(images => createProduct.mutateAsync({...values, images}).then(async ()=> await refetchProducts()))
 
 			// await createProduct.mutateAsync(modifiedValues);
-		// }
+		}
 
 		handleClose();
 	};

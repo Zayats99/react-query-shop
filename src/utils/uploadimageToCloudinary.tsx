@@ -13,18 +13,15 @@ export const uploadImageToCloudinary = async (file: File) => {
   const data = await axios.post(BASE_URL, formData);
   return data.data["secure_url"];
 };
-const getFileFromURLObject = async (
-  url: string,
-  fileName: string = "unknown",
-  typeFile: string = "image/png"
-) => {
+const getFileFromURLObject = async (url: string, fileName: string = "unknown", typeFile: string = "image/png") => {
   return await fetch(url)
     .then((r) => r.blob())
     .then((res) => new File([res], fileName, { type: typeFile }))
 };
 export const checkUploadedImage = (images: TFileImage[]) => {
   if (images.length === 0) return [];
-  return images.map( async (image) => {
+ 
+  return images.map(async (image) => {
     if (image.type) {
       return await getFileFromURLObject(image.url, image.name, image.type).then(file => uploadImageToCloudinary(file))
     } else {

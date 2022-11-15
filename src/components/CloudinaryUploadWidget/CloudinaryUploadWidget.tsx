@@ -22,21 +22,19 @@ export const CloudinaryUploadWidget: FC<CloudinaryUploadWidgetProps> = ({
 }) => {
  
   const initialsImagesArray = useMemo(()=> convertImagesToFileImageType(images) ,[images]);
-console.log(initialsImagesArray)
   const [image, _setImage] = useState<TFileImage[] | []>(initialsImagesArray);
   const inputFileRef = useRef<any>(null);
-console.log(images)
-  const cleanup = () => {
-    image.map((img) => URL.revokeObjectURL(img?.url));
-    if (inputFileRef && inputFileRef.current) {
-      inputFileRef.current.value = null;
-    }
-  };
+  // const cleanup = () => {
+  //   image.map((img) => URL.revokeObjectURL(img?.url));
+  //   if (inputFileRef && inputFileRef.current) {
+  //     inputFileRef.current.value = null;
+  //   }
+  // };
   
   const setImage = (newImage: TFileImage) => {
-    if (image) {
-      cleanup();
-    }
+    // if (image) {
+    //   cleanup();
+    // }
     _setImage([...image, newImage]);
     if (onChangeImage) {
       onChangeImage("images", [...image, newImage]);
