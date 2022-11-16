@@ -3,7 +3,6 @@ import { Box, CardMedia, Grid } from "@mui/material";
 
 import ClearIcon from "@mui/icons-material/Clear";
 import AddIcon from "@mui/icons-material/Add";
-
 import {
   convertImagesToFileImageType,
   EditBox,
@@ -16,11 +15,21 @@ import { TFileImage } from "../../types/FileImage";
 
 interface CloudinaryUploadWidgetProps {
   images?: string[] | string | TFileImage[];
-  onChangeImage?: (field: string, value: any, shouldValidate?: boolean | undefined) => void;
+  onChangeImage?: (
+    field: string,
+    value: any,
+    shouldValidate?: boolean | undefined
+  ) => void;
 }
 
-export const CloudinaryUploadWidget: FC<CloudinaryUploadWidgetProps> = ({ images, onChangeImage }) => {
-  const initialsImagesArray = useMemo(() => convertImagesToFileImageType(images), [images]);
+export const CloudinaryUploadWidget: FC<CloudinaryUploadWidgetProps> = ({
+  images,
+  onChangeImage
+}) => {
+  const initialsImagesArray = useMemo(
+    () => convertImagesToFileImageType(images),
+    [images]
+  );
   const [image, _setImage] = useState<TFileImage[] | []>(initialsImagesArray);
   const inputFileRef = useRef<any>(null);
 
@@ -70,7 +79,12 @@ export const CloudinaryUploadWidget: FC<CloudinaryUploadWidgetProps> = ({ images
           <LableUploadFile htmlFor="upload-input">
             <AddIcon />
           </LableUploadFile>
-          <InputUploadFile id="upload-input" ref={inputFileRef} type="file" onChange={handleOnChandge} />
+          <InputUploadFile
+            id="upload-input"
+            ref={inputFileRef}
+            type="file"
+            onChange={handleOnChandge}
+          />
         </Grid>
       </Grid>
     </Grid>

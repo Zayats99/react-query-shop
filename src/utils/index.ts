@@ -1,1 +1,1 @@
-export * from './uploadimageToCloudinary';
+export * from "./uploadimageToCloudinary";

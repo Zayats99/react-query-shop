@@ -1,15 +1,29 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Formik } from "formik";
-import { Box, Button, Typography, Modal, TextField, Grid, MenuItem, InputAdornment } from "@mui/material";
 
-import { IProduct } from "../../services/product.service";
+import {
+  useCategories,
+  useProductDelete,
+  useProductUpdate,
+  useProductCreate,
+  useProducts
+} from "../../hooks";
+import { TFileImage } from "./../../types";
+import { IProduct } from "../../services";
+import { checkUploadedImage } from "../../utils";
 
 import { CloudinaryUploadWidget } from "../CloudinaryUploadWidget/CloudinaryUploadWidget";
-
-import { useCategories, useProductDelete, useProductUpdate, useProductCreate, useProducts } from "../../hooks";
-import { TFileImage } from "./../../types";
-import { checkUploadedImage } from "../../utils";
+import {
+  Box,
+  Button,
+  Typography,
+  Modal,
+  TextField,
+  Grid,
+  MenuItem,
+  InputAdornment
+} from "@mui/material";
 
 interface IProductModal {
   open: boolean;
@@ -37,7 +51,12 @@ const style = {
   padding: "20px 32px"
 };
 
-export function ProductModal({ open, initialState, refetchProduct, handleClose }: IProductModal) {
+export function ProductModal({
+  open,
+  initialState,
+  refetchProduct,
+  handleClose
+}: IProductModal) {
   const { categories } = useCategories();
   const { refetchProducts } = useProducts();
   const { createProduct } = useProductCreate();
@@ -54,12 +73,17 @@ export function ProductModal({ open, initialState, refetchProduct, handleClose }
 
   const handleSubmitForm = async (values: IModalState) => {
     initialState
-      ? Promise.all(checkUploadedImage(values.images as TFileImage[])).then(async (images) => {
-          await updateProduct.mutateAsync({ ...values, images });
-          return refetchProduct && refetchProduct();
-        })
-      : Promise.all(checkUploadedImage(values.images as TFileImage[])).then((images) =>
-          createProduct.mutateAsync({ ...values, images }).then(async () => await refetchProducts())
+      ? Promise.all(checkUploadedImage(values.images as TFileImage[])).then(
+          async (images) => {
+            await updateProduct.mutateAsync({ ...values, images });
+            return refetchProduct && refetchProduct();
+          }
+        )
+      : Promise.all(checkUploadedImage(values.images as TFileImage[])).then(
+          (images) =>
+            createProduct
+              .mutateAsync({ ...values, images })
+              .then(async () => await refetchProducts())
         );
 
     handleClose();
@@ -99,7 +123,16 @@ export function ProductModal({ open, initialState, refetchProduct, handleClose }
               handleSubmitForm(values);
             }}
           >
-            {({ values, errors, touched, handleChange, handleBlur, handleSubmit, isSubmitting, setFieldValue }) => (
+            {({
+              values,
+              errors,
+              touched,
+              handleChange,
+              handleBlur,
+              handleSubmit,
+              isSubmitting,
+              setFieldValue
+            }) => (
               <Box
                 component="form"
                 sx={{
@@ -143,7 +176,9 @@ export function ProductModal({ open, initialState, refetchProduct, handleClose }
                     variant="outlined"
                     type="number"
                     InputProps={{
-                      startAdornment: <InputAdornment position="start">$</InputAdornment>
+                      startAdornment: (
+                        <InputAdornment position="start">$</InputAdornment>
+                      )
                     }}
                     sx={{ width: "206px", ml: "auto" }}
                   />
@@ -158,18 +193,35 @@ export function ProductModal({ open, initialState, refetchProduct, handleClose }
                   value={values.description}
                   sx={{ width: "100%" }}
                 />
-                <CloudinaryUploadWidget images={values.images} onChangeImage={setFieldValue} />
+                <CloudinaryUploadWidget
+                  images={values.images}
+                  onChangeImage={setFieldValue}
+                />
                 <Grid container sx={{ mt: "30px", gap: "10px" }}>
-                  <Button variant="outlined" color="primary" onClick={handleClose}>
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    onClick={handleClose}
+                  >
                     Cancel
                   </Button>
                   {initialState && (
-                    <Button variant="outlined" color="error" onClick={handleDelete}>
+                    <Button
+                      variant="outlined"
+                      color="error"
+                      onClick={handleDelete}
+                    >
                       Delete
                     </Button>
                   )}
 
-                  <Button variant="contained" type="submit" color="success" disabled={isSubmitting} sx={{ ml: "auto" }}>
+                  <Button
+                    variant="contained"
+                    type="submit"
+                    color="success"
+                    disabled={isSubmitting}
+                    sx={{ ml: "auto" }}
+                  >
                     {initialState ? "Update" : "Create"}
                   </Button>
                 </Grid>
