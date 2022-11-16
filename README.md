@@ -1,7 +1,15 @@
-# Getting Started with Create React App
+# Getting Started 
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+### Add environment variables
 
+```sh
+REACT_APP_UPLOAD_PRESET=[your upload preset]
+REACT_APP_CLOUDINARY_UPLOAD_NAME=[your cloud name]
+```
+### Install all dev
+```
+npm install
+```
 ## Available Scripts
 
 In the project directory, you can run:
@@ -10,14 +18,6 @@ In the project directory, you can run:
 
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
 ### `npm run build`
 
@@ -29,18 +29,35 @@ Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `npm run eject`
+## Commit workflow
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+### General commit patern
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```sh
+type(scope?): description
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+- ```type ``` - Possible values are feat | fix | style | chore | ci.
+ - ```scope ``` - Any scope to which type applies, usually we either omit scope or use the component name / part of the app name.
+ - ``` description  ``` - Description of changes, needs to start with lowercase character to pass 
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+Example: 
+```sh
+feat(UploadWidget): created a widget for uploading images to Cloudinary
+```
+### Supported types:
+- ```feat``` - a new feature
+  ```feat(scope): description or feat: description```
 
-## Learn More
+- ```fix``` - a bug fix
+  ```fix(scope): description or fix: description```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+ - ```style``` - changes only styles 
+    ```style(scope): description or style: description```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+- ```chore``` - other changes that don't modify src
+ ```chore(scope): description or chore: description```
+
+- ```ci``` - changes to CI configuration files and scripts
+  ```ci(scope): description or ci: description```
+
