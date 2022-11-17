@@ -39,10 +39,15 @@ function HomeMemoized() {
           <CircularProgress color="inherit" />
         </Backdrop>
       ) : response?.data.length ? (
-        <>
+        <Grid
+          container
+          direction="column"
+          justifyContent="space-between"
+          sx={{ minHeight: "calc(100vh - 96px)" }}
+        >
           <Grid container spacing={2}>
             {currentProducts?.map(({ id, title, price, category, images }) => (
-              <Grid key={id} item xs={3}>
+              <Grid key={id} item xs={12} sm={6} md={4} lg={3}>
                 <ProductCard
                   id={id}
                   title={title}
@@ -55,7 +60,7 @@ function HomeMemoized() {
             ))}
           </Grid>
           {response.data.length / 12 > 1 && (
-            <Grid container p={2} justifyContent="flex-end">
+            <Grid container py={2} justifyContent="flex-end">
               <Pagination
                 count={Math.ceil(response.data.length / 12)}
                 page={page}
@@ -66,7 +71,7 @@ function HomeMemoized() {
               />
             </Grid>
           )}
-        </>
+        </Grid>
       ) : (
         <div>Elements not found...</div>
       )}

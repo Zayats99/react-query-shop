@@ -48,6 +48,7 @@ function Product() {
             md={7}
             justifyContent="center"
             alignItems="center"
+            direction="row"
           >
             <Typography
               gutterBottom
@@ -60,7 +61,9 @@ function Product() {
               component="img"
               sx={{
                 width: 750,
-                maxWidth: { xs: 350, md: 750 }
+                height: 500,
+                objectFit: "contain"
+                // maxWidth: { xs: 350, md: 750 }
               }}
               alt={product?.title}
               src={product?.images[currentImg]}
@@ -68,20 +71,29 @@ function Product() {
             <Grid
               item
               container
-              justifyContent="center"
+              // justifyContent="center"
               alignItems="center"
-              sx={{ p: 1, gap: "10px" }}
+              sx={{ py: 1, gap: 1, flexWrap: "nowrap", overflowY: "auto" }}
             >
               {Array.isArray(product?.images) &&
                 product?.images.map((img, index) => (
                   <ButtonBase
                     key={index}
                     onClick={() => swithPhotoHandler(index)}
+                    sx={{
+                      width: "120px",
+                      height: "100px",
+                      flexShrink: 0,
+                      ml: index === 0 ? "auto" : 0,
+                      mr: index === product.images.length - 1 ? "auto" : 0
+                    }}
                   >
                     <Box
                       component="img"
                       sx={{
-                        width: 120
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "contain"
                       }}
                       alt={product?.title}
                       src={img}

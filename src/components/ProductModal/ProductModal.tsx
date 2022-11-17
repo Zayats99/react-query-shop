@@ -46,7 +46,9 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 600,
+  width: { xs: 370, sm: 600 },
+  maxHeight: "100vh",
+  overflowY: "auto",
   bgcolor: "background.paper",
   boxShadow: 24,
   padding: "20px 32px"
@@ -168,40 +170,44 @@ export function ProductModal({
                   error={!!errors.title && touched.title}
                   helperText={errors.title}
                 />
-                <Grid item container>
-                  <TextField
-                    id="outlined-select-currency"
-                    name="categoryId"
-                    select
-                    label="Category"
-                    value={values.categoryId}
-                    onChange={handleChange}
-                    sx={{ width: "309px" }}
-                  >
-                    {categories &&
-                      categories?.map((option) => (
-                        <MenuItem key={option.id} value={option.id}>
-                          {option.name}
-                        </MenuItem>
-                      ))}
-                  </TextField>
-                  <TextField
-                    name="price"
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    value={values.price > 0 && values.price}
-                    label="Price"
-                    variant="outlined"
-                    type="number"
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">$</InputAdornment>
-                      )
-                    }}
-                    sx={{ width: "206px", ml: "auto" }}
-                    error={!!errors.price && touched.price}
-                    helperText={errors.price}
-                  />
+                <Grid item container gap={{ xs: 2, sm: 0 }}>
+                  <Grid item xs={12} sm={8} pr={{ sx: 0, sm: 2 }}>
+                    <TextField
+                      id="outlined-select-currency"
+                      name="categoryId"
+                      select
+                      label="Category"
+                      value={values.categoryId}
+                      onChange={handleChange}
+                      sx={{ width: "100%" }}
+                    >
+                      {categories &&
+                        categories?.map((option) => (
+                          <MenuItem key={option.id} value={option.id}>
+                            {option.name}
+                          </MenuItem>
+                        ))}
+                    </TextField>
+                  </Grid>
+                  <Grid item xs={12} sm={4}>
+                    <TextField
+                      name="price"
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={values.price > 0 && values.price}
+                      label="Price"
+                      variant="outlined"
+                      type="number"
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">$</InputAdornment>
+                        )
+                      }}
+                      sx={{ width: "100%" }}
+                      error={!!errors.price && touched.price}
+                      helperText={errors.price}
+                    />
+                  </Grid>
                 </Grid>
                 <TextField
                   label="Description"
