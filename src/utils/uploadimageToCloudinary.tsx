@@ -33,7 +33,7 @@ export const checkUploadedImage = (images: TFileImage[]) => {
         (file) => uploadImageToCloudinary(file)
       );
     } else {
-      return image.url;
+      return image.url ? image.url : image;
     }
   });
 };
