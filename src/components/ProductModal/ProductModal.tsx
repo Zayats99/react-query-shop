@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Formik } from "formik";
+import * as Yup from "yup";
 
 import {
   useCategories,
@@ -51,6 +52,18 @@ const style = {
   padding: "20px 32px"
 };
 
+const ProductSchema = Yup.object().shape({
+  title: Yup.string()
+    .min(3, "Too Short!")
+    .max(50, "Too Long!")
+    .required("Required!"),
+  price: Yup.number().required("Required!").positive("Not valid!"),
+  description: Yup.string()
+    .min(10, "Too Short!")
+    .max(1500, "Too Long!")
+    .required("Required!")
+});
+
 export function ProductModal({
   open,
   initialState,
@@ -68,6 +81,7 @@ export function ProductModal({
   const navigate = useNavigate();
   const handleDelete = async () => {
     await deleteProduct.mutateAsync();
+    refetchProducts();
     navigate("/");
   };
 
@@ -76,7 +90,8 @@ export function ProductModal({
       ? Promise.all(checkUploadedImage(values.images as TFileImage[])).then(
           async (images) => {
             await updateProduct.mutateAsync({ ...values, images });
-            return refetchProduct && refetchProduct();
+            refetchProduct && refetchProduct();
+            refetchProducts();
           }
         )
       : Promise.all(checkUploadedImage(values.images as TFileImage[])).then(
@@ -119,6 +134,7 @@ export function ProductModal({
 
           <Formik
             initialValues={{ ...initialValues }}
+            validationSchema={ProductSchema}
             onSubmit={(values) => {
               handleSubmitForm(values);
             }}
@@ -149,6 +165,8 @@ export function ProductModal({
                   label="Product title"
                   variant="outlined"
                   sx={{ width: "100%" }}
+                  error={!!errors.title && touched.title}
+                  helperText={errors.title}
                 />
                 <Grid item container>
                   <TextField
@@ -181,6 +199,8 @@ export function ProductModal({
                       )
                     }}
                     sx={{ width: "206px", ml: "auto" }}
+                    error={!!errors.price && touched.price}
+                    helperText={errors.price}
                   />
                 </Grid>
                 <TextField
@@ -192,6 +212,8 @@ export function ProductModal({
                   onBlur={handleBlur}
                   value={values.description}
                   sx={{ width: "100%" }}
+                  error={!!errors.description && touched.description}
+                  helperText={errors.description}
                 />
                 <CloudinaryUploadWidget
                   images={values.images}
@@ -219,7 +241,12 @@ export function ProductModal({
                     variant="contained"
                     type="submit"
                     color="success"
-                    disabled={isSubmitting}
+                    disabled={
+                      isSubmitting ||
+                      !!errors.title ||
+                      !!errors.price ||
+                      !!errors.description
+                    }
                     sx={{ ml: "auto" }}
                   >
                     {initialState ? "Update" : "Create"}
