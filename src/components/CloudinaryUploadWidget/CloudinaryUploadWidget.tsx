@@ -3,14 +3,10 @@ import { Box, CardMedia, Grid } from "@mui/material";
 
 import ClearIcon from "@mui/icons-material/Clear";
 import AddIcon from "@mui/icons-material/Add";
-import {
-  convertImagesToFileImageType,
-  EditBox,
-  InputUploadFile,
-  LableUploadFile,
-  RemoveButton,
-  styles
-} from "./helper";
+
+import { convertImagesToFileImageType } from "./helper";
+import * as S from './style';
+
 import { TFileImage } from "../../types/FileImage";
 
 interface CloudinaryUploadWidgetProps {
@@ -26,6 +22,7 @@ export const CloudinaryUploadWidget: FC<CloudinaryUploadWidgetProps> = ({
   images,
   onChangeImage
 }) => {
+  const { styles } = S
   const initialsImagesArray = useMemo(
     () => convertImagesToFileImageType(images),
     [images]
@@ -62,31 +59,29 @@ export const CloudinaryUploadWidget: FC<CloudinaryUploadWidgetProps> = ({
   };
 
   return (
-    <Grid container>
-      <Grid item container sx={styles.gridContainer}>
+      <S.ScrollGrid container> 
         {image.length !== 0 &&
           image.map((item, index) => (
             <Box key={index} sx={styles.boxStyle}>
-              <EditBox>
-                <RemoveButton onClick={() => handleRemoveImage(item.url)}>
+              <S.EditBox>
+                <S.RemoveButton onClick={() => handleRemoveImage(item.url)}>
                   <ClearIcon fontSize="small" />
-                </RemoveButton>
-              </EditBox>
+                </S.RemoveButton>
+              </S.EditBox>
               <CardMedia sx={styles.img} component="img" image={item.url} />
             </Box>
           ))}
         <Grid sx={{ ...styles.boxStyle, ...styles.emptyBox }}>
-          <LableUploadFile htmlFor="upload-input">
+          <S.LableUploadFile htmlFor="upload-input">
             <AddIcon />
-          </LableUploadFile>
-          <InputUploadFile
+          </S.LableUploadFile>
+          <S.InputUploadFile
             id="upload-input"
             ref={inputFileRef}
             type="file"
             onChange={handleOnChandge}
           />
         </Grid>
-      </Grid>
-    </Grid>
+      </S.ScrollGrid>
   );
 };
